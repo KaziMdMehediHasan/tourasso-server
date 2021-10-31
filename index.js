@@ -39,14 +39,13 @@ async function run() {
 
     console.log("Database Connection Successful");
 
-
     /*-----------------GET API------------------*/
 
     app.get("/offers", async (req, res) => {
       const cursor = packages.find({});
       const result = await cursor.toArray();
       res.json(result);
-    })
+    });
 
     app.get("/trips", async (req, res) => {
       const cursor = trips.find({});
@@ -55,58 +54,71 @@ async function run() {
     });
     // get by id
 
-    app.get("/offers/:id", async (req, res)=>{
+    app.get("/offers/:id", async (req, res) => {
       const id = req.params.id;
-      const query = {_id:ObjectId(id)}
+      const query = { _id: ObjectId(id) };
       const result = await packages.findOne(query);
       res.json(result);
-    })
+    });
 
-
-    app.get("/mytrips/:email", async (req, res)=>{
+    app.get("/mytrips/:email", async (req, res) => {
       // const email = req.params.email;
       // const query = {email: email};
-      const result = await trips.find({email: req.params.email}).toArray();
+      const result = await trips.find({ email: req.params.email }).toArray();
       console.log(result);
       res.send(result);
-    })
+    });
 
+    app.get("/trips/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await trips.findOne(query);
+      console.log(result);
+      res.json(result);
+    });
 
     /*-----------------end of GET API------------------*/
 
-
-  
     /*-----------------------POST API---------------------*/
 
-        app.post("/offers", async (req, res) => {
-          // console.log(req.body);
-          const offer = req.body;
-          const result = await packages.insertOne(offer);
-          console.log(result);
-          res.json(result);
-        });
+    app.post("/offers", async (req, res) => {
+      // console.log(req.body);
+      const offer = req.body;
+      const result = await packages.insertOne(offer);
+      console.log(result);
+      res.json(result);
+    });
 
-        app.post("/trips", async (req, res) => {
-          const trip = req.body;
-          const result = await trips.insertOne(trip);
-          console.log(result);
-          res.json(result);
-        })
+    app.post("/trips", async (req, res) => {
+      const trip = req.body;
+      const result = await trips.insertOne(trip);
+      console.log(result);
+      res.json(result);
+    });
     /*-----------------------end of POST API---------------------*/
+
+    /*---------------UPDATE API ------------------*/
+
+    app.put("/update/:id", async (req, res) => {
+      const id = req.params.id;
+      const updateInfo = req.body;
+      const filter = { _id: ObjectId(id) };
+      const result = await trips.findOne(filter);
+      console.log(result);
+    });
+    /*---------------end of UPDATE API ------------------*/
 
     /*--------------------DELETE API-----------------*/
 
     app.delete("/trips/:id", async (req, res) => {
       const id = req.params.id;
-      const query = {_id: ObjectId(id)};
+      const query = { _id: ObjectId(id) };
       const result = await trips.deleteOne(query);
       console.log(result);
       res.json(result);
-    })
-    
+    });
+
     /*--------------------end of DELETE API-----------------*/
-
-
   } finally {
 
   }
