@@ -99,12 +99,20 @@ async function run() {
 
     /*---------------UPDATE API ------------------*/
 
-    app.put("/update/:id", async (req, res) => {
+    app.put("/trips/:id", async (req, res) => {
       const id = req.params.id;
       const updateInfo = req.body;
       const filter = { _id: ObjectId(id) };
-      const result = await trips.findOne(filter);
-      console.log(result);
+      trips
+        .updateOne(filter, {
+          $set: {
+            status: updateInfo.status,
+          },
+        })
+        .then((result) => {
+          console.log(result);
+          res.json(result);
+        });
     });
     /*---------------end of UPDATE API ------------------*/
 
